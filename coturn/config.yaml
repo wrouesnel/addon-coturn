@@ -1,0 +1,65 @@
+---
+name: coturn
+version: 0.1.0
+slug: coturn
+description: >
+  coturn is a free open source implementation of TURN and STUN Server. 
+  The TURN Server is a VoIP media traffic NAT traversal server and gateway.
+url: https://github.com/wrouesnel/addon-coturn
+codenotary: wrouesnel@wrouesnel.com
+init: false
+arch:
+  - aarch64
+  - amd64
+  - armhf
+  - armv7
+  - i386
+host_network: true
+services: []
+map:
+  - ssl
+backup_exclude:
+  - "*/logs"
+options:
+  listening-ip:
+  - "0.0.0.0"
+  listening-port: 3478
+  fingerprint: true
+  verbose: true
+  lt-cred-mech: true
+  users: []
+  min-port: 49152
+  max-port: 65535
+schema:
+  realm: str?
+  server-name: str?
+
+  listening-ip:
+  - str
+
+  external-ip:
+  - str?
+
+  relay-ip:
+  - str?
+
+  listening-port: int(1,65535)
+  tls-listening-port: int(1,65535)?
+
+  tls-cert: str?
+  tls-pkey: str?
+
+  min-port: int(1,65535)
+  max-port: int(1,65535)
+
+  fingerprint: bool
+
+  verbose: bool
+  lt-cred-mech: bool
+
+  users:
+  - username: str
+    password: str
+
+  extra_params:
+  - str?

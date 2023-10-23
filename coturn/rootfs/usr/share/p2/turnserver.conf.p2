@@ -1,0 +1,55 @@
+# TEMPLATED CONFIG: {%now "2006-01-02 15:04:05" %}
+{%- if "realm" in options %}
+realm={{options.realm}}
+{% endif %}
+
+{%- if "server-name" in options %}
+realm={{options["server-name"]}}
+{% endif %}
+
+{%- for listening_ip in options["listening-ip"] %}
+listening-ip={{listening_ip | replace:["host", options.DEFAULT_ADDR ] }}
+{%- endfor %}
+
+{%- for relay_ip in options["relay-ip"] %}
+relay_ip={{relay_ip | replace:["host", options.DEFAULT_ADDR ] }}
+{%- endfor %}
+
+{%- for external_ip in options["external-ip"] %}
+external-ip={{external_ip | replace:["host", options.DEFAULT_ADDR ] }}
+{% endfor %}
+
+listening-port={{options["listening-port"]|integer}}
+{%- if "tls-listening-port" in options %}
+tls-listening-port={{options["tls-listening-port"]|integer}}
+{%- endif %}
+
+min-port={{options["min-port"]|integer}}
+max-port={{options["max-port"]|integer}}
+
+{%- if options.fingerprint %}
+fingerprint
+{% endif %}
+{%- if options.verbose %}
+verbose
+{% endif %}
+{%- if options["lt-cred-mech"] %}
+# lt-cred-mech is enabled
+lt-cred-mech
+{%- for user in options.users %}
+user={{user.username}}:{{user.password}}
+{%- endfor %}
+{%- else %}
+# lt-cred-mech is disabled in options
+no-auth
+{% endif %}
+
+# Hardcoded insecure TLS disable
+no-tlsv1
+no-tlsv1_1
+
+{%- if "extra_params" in  options["extra_params"] %}
+{% for extra_param in options["extra_params"] %}
+{{extra_param}}
+{% endfor %}
+{% endif %}

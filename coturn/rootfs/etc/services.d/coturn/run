@@ -1,0 +1,36 @@
+#!/command/with-contenv bashio
+# ==============================================================================
+# Home Assistant Add-on: coturn
+# Runs the coturn server
+# ==============================================================================
+declare -a options
+
+bashio::log.info "Starting Coturn..."
+
+options+=(--abort_on_uncaught_exception)
+options+=("--max_old_space_size=250")
+
+export NODE_CONFIG_DIR=/data/pairdrop
+export NODE_ENV=production
+
+if bashio::debug; then
+  export DEBUG=1
+fi
+
+# IPv6 is currently not supported yet on a Supervisor enabled system.
+export DISABLE_IPV6="true"
+
+# Extract the current default route so it can be made available to p2.
+export DEFAULT_ROUTE_INTF="$(ip route | grep '^default.*' | grep -o 'dev .*' | cut -d' ' -f2)"
+export DEFAULT_ADDR="$(ip addr show dev "${DEFAULT_ROUTE_INTF}" | grep inet | head -n1 | grep -o 'inet .*' | cut -d' ' -f2 | cut -d'/' -f1)"
+
+# Template the config file
+p2 \
+  --input-root-key options \
+  --include-env \
+  --input /data/options.json \
+  --template /usr/share/p2/turnserver.conf.p2 \
+  --output /tmp/turnserver.conf
+
+# Start the server
+exec turnserver -c /tmp/turnserver.conf
