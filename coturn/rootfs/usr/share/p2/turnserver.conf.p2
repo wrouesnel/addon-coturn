@@ -12,7 +12,7 @@ listening-ip={{listening_ip | replace:["host", options.DEFAULT_ADDR ] }}
 {%- endfor %}
 
 {%- for relay_ip in options["relay-ip"] %}
-relay_ip={{relay_ip | replace:["host", options.DEFAULT_ADDR ] }}
+relay-ip={{relay_ip | replace:["host", options.DEFAULT_ADDR ] }}
 {%- endfor %}
 
 {%- for external_ip in options["external-ip"] %}

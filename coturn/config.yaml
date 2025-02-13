@@ -1,6 +1,6 @@
 ---
 name: coturn
-version: 0.1.0
+version: 0.2.0
 slug: coturn
 description: >
   coturn is a free open source implementation of TURN and STUN Server. 
